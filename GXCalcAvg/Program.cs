@@ -105,4 +105,5 @@ static void CalculatePrices()
     Email.SendEmail(ErrorChecker);
 }
 
+// Calls the production method to begin running the program when the .exe is opened. 
 CalculatePrices();
