@@ -1,0 +1,1 @@
+Scaffold-DbContext "Server=81.143.215.110;Database=prices;User Id=it;Password=Th1s1s4R34llyL0ngP4ssw0rdT0Mk3Th!5R34llyH4rdF0rS0m30n3T0H4ck;Port=59734" Npgsql.EntityFrameworkCore.PostgreSQL -OutputDir Prices -Force -Context PricesContext -Tables y_ftgbp,y_fteur,y_gimid,y_published_wholesale,y_supplier_prices,z_icefut_lsg,prima_forward_price,y_argusomr_biofuels_newer
