@@ -15,7 +15,9 @@ namespace PortlandPublishedCalculator.Utility
             petrol,
             ethanol,
             jet,
-            propane
+            propane,
+            hvo_frb,
+            hvo_cif_nwe
         }
         public static Grade[] GetAllGradesAsArray()
         {   
@@ -26,7 +28,10 @@ namespace PortlandPublishedCalculator.Utility
                 Grade.petrol,
                 Grade.ethanol,
                 Grade.jet,
-                Grade.propane
+                Grade.propane,
+                Grade.hvo_frb,
+                Grade.hvo_cif_nwe
+
             };
         }
         // Switch statement to get the string attached to the grade's name
@@ -38,18 +43,9 @@ namespace PortlandPublishedCalculator.Utility
             Grade.ethanol => "Ethanol EUR CBM",
             Grade.jet => "Jet CIF NWE",
             Grade.propane => "Propane CIF NWE",
+            Grade.hvo_frb => "HVO FRB",
+            Grade.hvo_cif_nwe => "HVO CIF NWE",
             _ => ""
         };
-        //// Switch statement to get the string attached to the grade's name, but instead parses a string instead of the enum
-        //public static string GetGradeNameString(string grade) => (grade) switch
-        //{
-        //    "diesel" => "Diesel CIF NWE",
-        //    "fame" => "FAME-10",
-        //    "petrol" => "Unleaded CIF NWE",
-        //    "ethanol" => "Ethanol EUR CBM",
-        //    "jet" => "Jet CIF NWE",
-        //    "propane" => "Propane CIF NWE",
-        //    _ => ""
-        //};
     }
 }

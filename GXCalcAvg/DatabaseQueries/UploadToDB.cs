@@ -38,6 +38,12 @@ public class UploadToDB
                 case "propane":
                     existingRow.PropaneCifNwe = price;
                     break;
+                case "hvo_frb":
+                    existingRow.HvoFrb = price;
+                    break;
+                case "hvo_cif_nwe":
+                    existingRow.HvoCifNwe = price;
+                    break;
 
             }
             db.SaveChanges();
@@ -66,6 +72,12 @@ public class UploadToDB
                     break;
                 case "propane":
                     ypw.PropaneCifNwe = price;
+                    break;
+                case "hvo_frb":
+                    ypw.HvoFrb = price;
+                    break;
+                case "hvo_cif_nwe":
+                    ypw.HvoCifNwe = price;
                     break;
             }
             ypw.PublishedDate = date;

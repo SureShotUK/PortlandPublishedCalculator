@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using PublicHoliday;
 using PortlandPublishedCalculator.Dates;
 using PortlandPublishedCalculator.Prices;
+using PortlandPublishedCalculator.Calculations;
 
 namespace PortlandPublishedCalculator.DatabaseQueries
 {
@@ -77,12 +78,34 @@ namespace PortlandPublishedCalculator.DatabaseQueries
             }
             return mostRecentPublishedDiesel;
         }
+        // Retrieves the Published Portland Diesel CIF NWE price (which should have been published at this point, and if it doesn't exist, then it generators a price.
+        public static double? Diesel_CIF_NWE(DateOnly date)
+        {
+            try
+            {
+                double? diesel_cif_nwe = db.YPublishedWholesales.Where(x => x.PublishedDate == date)
+                    .Select(x => x.DieselCifNwe).FirstOrDefault();
+                return diesel_cif_nwe;
+            }
+            catch
+            {
+                try
+                {
+                    return Portland_Diesel_Price(date);
+                }
+                catch
+                {
+                    return null;
+                }
+
+            }
+        }
         // Retrieves the diesel GX_Price used in the Portland Diesel CIF NWE calculation
-        public static double? GX_Price(DateOnly date)
+        public static double? GX_Diesel_Price(DateOnly date)
         {   
             try
             {
-                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000093).First();
+                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000257).First();
                 return gxprice;
             }
             catch
@@ -296,6 +319,132 @@ namespace PortlandPublishedCalculator.DatabaseQueries
                         .Select(x => x.Price).First();
                     return prima_T2_physical_ethanol;
                 }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        // Returns the HVO Production Cost from y_hvo_production_cost.
+        // Note: This is not a daily upload to the db, and instead the function will return the closest HVO production cost value to the given date.
+        public static double? HVO_Production_Cost(DateOnly date)
+        {   
+            // Will order the hv_production_cost table by the published_date column, and then will find the first date that is less than or equal to the givendate. 
+            double? hvo_production_cost = db.YHvoProductionCosts.OrderBy(x => x.PublishedDate)
+                .Where(x => x.PublishedDate <= date).Select(x => x.ProductionCost).Last();
+            return hvo_production_cost;
+
+        }
+        // Retrieves the most recent Prima T1 price that is the same date or less than the specified date.
+        public static double? Prima_T1_UCO_CIF_ARA(DateOnly date)
+        {
+            double? prima_t1_uco_cif_ara = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
+                .Where(x => x.PublishedDate <= date && x.Grade == "T1 UCO CIF ARA").Select(x => x.Price).Last();
+
+            return prima_t1_uco_cif_ara;
+        }
+        // Retrieves the HVO Blend Percentage for the given date from the hvo_blend_percentages table in the database
+        public static double? HVO_Blend_Percentages(DateOnly date)
+        {
+            double? hvo_blend_percentage = db.YHvoBlendPercentages.OrderBy(x => x.PublishedDate)
+                .Where(x => x.PublishedDate <= date).Select(x => x.Hvo).Last();
+            return hvo_blend_percentage;
+        }
+        // Retrieves the ArgusOMR THG Konventionelle low and high prices, and then creates an average of the two
+        public static double? ArgusOMR_THG_Konventionelle(DateOnly date)
+        {
+            try
+            {
+                double? argusomr_thg_konventionelle_low = db.YArgusomrThgs.Where(x => x.PublishedDate == date && x.Grade == "Konventionelle").Select(x => x.Low).First();
+                double? argusomr_thg_konventionelle_high = db.YArgusomrThgs.Where(x => x.PublishedDate == date && x.Grade == "Konventionelle").Select(x => x.High).First();
+                double? avg = (argusomr_thg_konventionelle_low + argusomr_thg_konventionelle_high) / 2;
+                return avg;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        // Retrieves the GBP - EUR exchange rate for a given day from the y_ftgbps table in the database
+        public static double? FTGbp_To_Eur(DateOnly date)
+        {
+            try
+            {
+                double? ftgbp_to_eur = db.YFtgbps.Where(x => x.PublishedDate == date).Select(x =>x.Eur).First();
+                return ftgbp_to_eur;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        // Retrieves the GBP - USD exchange rate for a given day from the y_ftgbps table in the database
+        public static double? FTGbp_To_Usd(DateOnly date)
+        {
+            try
+            {
+                double? ftgbp_to_usd = db.YFtgbps.Where(x => x.PublishedDate == date).Select(x =>x.Usd).First();
+                return ftgbp_to_usd;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        // Retrieves the GX Price for the 093 code from the y_gimid's table in the database
+        public static double? GX_093(DateOnly date)
+        {
+            try
+            {
+                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000093).First();
+                return gxprice;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        // Retrieves the GX Price for the 258 code from the y_gimid's table in the database
+        public static double? GX_258(DateOnly date)
+        {
+            try
+            {
+                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000258).First();
+                return gxprice;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        // Retrieves the ArgusOMR HVO Class II value from the y_argusomr_biofuels_newer table in the database
+        public static double? ArgusOMR_HVO_Class_II(DateOnly date)
+        {
+            try
+            {
+                double? argusomr_hvo_class_ii = db.YArgusomrBiofuelsNewers.Where(x => x.PublishedDate == date).Select(x => x.HvoClassIi).First();
+                return argusomr_hvo_class_ii;
+            }
+            catch 
+            { 
+                return null; 
+            }
+        }
+        // Retrieves the most recent Prima HVO Plant price from the prima_spot_price table in the database
+        public static double? Prima_HVO_Plant(DateOnly date)
+        {
+            double? prima_hvo_plant = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
+                .Where(x => x.PublishedDate <= date && x.Grade == "HVO Plant (UCO Input)").Select(x => x.Price).Last();
+            return prima_hvo_plant;
+        }
+        // Retrieves the Published Portland HVO FRB price for the given date
+        public static double? Portland_HVO_FRB(DateOnly date)
+        {
+            try
+            {
+                double? portland_hvo_frb = db.YPublishedWholesales.Where(x => x.PublishedDate == date)
+                    .Select(x => x.HvoFrb).First();
+                return portland_hvo_frb;
             }
             catch
             {

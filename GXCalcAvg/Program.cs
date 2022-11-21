@@ -21,8 +21,8 @@ using System.Text;
 static void BetweenTwoDates()
 {
     //yy - mm - dd format:
-    DateOnly startDate = new(2022, 07, 15);
-    DateOnly endDate = new(2022, 11, 16);
+    DateOnly startDate = new(2022, 07, 18);
+    DateOnly endDate = new(2022, 11, 18);
 
     DateOnly date = Date.WorkingDayCheck(startDate);
     while (date <= endDate)
@@ -32,7 +32,7 @@ static void BetweenTwoDates()
         //if (diesel_price.HasValue)
         //{
         //    Console.WriteLine("The Portland Diesel Price for " + date + " is " + diesel_price);
-        //    //UploadToDB.YPublishedWholesale(date, diesel_price, "diesel"); //Uploads the price to the database.
+        //    UploadToDB.YPublishedWholesale(date, diesel_price, "diesel"); //Uploads the price to the database.
         //}
 
         //// Calculates the Portland FAME-10 price for a given date.
@@ -51,13 +51,13 @@ static void BetweenTwoDates()
         //    //UploadToDB.YPublishedWholesale(date, portland_unleaded_petrol, "petrol");
         //}
 
-        // Calculates the Portland Ethanol EUR CBM price for a given date.
-        double? portland_ethanol_eur_cbm = Calculations.Portland_Ethanol_EUR_CBM(date);
-        if (portland_ethanol_eur_cbm.HasValue)
-        {
-            Console.WriteLine("The Portland Ethanol EUR CBM Price for " + date + " is " + portland_ethanol_eur_cbm);
-            // UploadToDB.YPublishedWholesale(date, portland_ethanol_eur_cbm, "ethanol");
-        }
+        //// Calculates the Portland Ethanol EUR CBM price for a given date.
+        //double? portland_ethanol_eur_cbm = Calculations.Portland_Ethanol_EUR_CBM(date);
+        //if (portland_ethanol_eur_cbm.HasValue)
+        //{
+        //    Console.WriteLine("The Portland Ethanol EUR CBM Price for " + date + " is " + portland_ethanol_eur_cbm);
+        //    // UploadToDB.YPublishedWholesale(date, portland_ethanol_eur_cbm, "ethanol");
+        //}
 
         //// Calculates the Portland Jet CIF NWE price for a given date.
         //double? portland_jet_cif_nwe = Calculations.Portland_Jet_CIF_NWE(date);
@@ -73,7 +73,21 @@ static void BetweenTwoDates()
         //{
         //    Console.WriteLine("The Portland Propane CIF NWE Price for " + date + " is " + portland_propane_cif_nwe);
         //    //UploadToDB.YPublishedWholesale(date, portland_propane_cif_nwe, "propane");
-        //}
+
+        // Calculates the Portland HVO FRB price for a given date.
+        double? portland_hvo_frb = Calculations.Portland_HVO_FRB(date);
+        if (portland_hvo_frb.HasValue)
+        {
+            Console.WriteLine("The Portland HVO FRB Price for " + date + " is " + portland_hvo_frb);
+            //UploadToDB.YPublishedWholesale(date, portland_hvo_frb, "hvo_frb");
+        }
+        // Calculates the Portland HVO CIF NWE price for a given date.
+        double? portland_hvo_cif_nwe = Calculations.Portland_HVO_CIF_NWE(date);
+        if (portland_hvo_cif_nwe.HasValue)
+        {
+            Console.WriteLine("The Portland HVO CIF NWE Price for " + date + " is " + portland_hvo_cif_nwe);
+            //UploadToDB.YPublishedWholesale(date, portland_hvo_cif_nwe, "hvo_cif_nwe");
+        }
 
         date = Date.NextWorkingDay(date); //Goes to the following working day. 
     }
@@ -98,7 +112,7 @@ static void CalculatePrices()
         {
             StringBuilderPlusConsole.GradeAppend(gradename, price);
             UploadToDB.YPublishedWholesale(previousWorkingDay, price, grade.ToString()); //Uploads the price to the database.
-        } else { StringBuilderPlusConsole.WriteLine(gradename + ": ERROR - Cannot generate a value."); ErrorChecker = true; }
+        } else { StringBuilderPlusConsole.WriteLine("<b>" + gradename + ": </b>" + "ERROR - Cannot generate a value."); ErrorChecker = true; }
     }
 
     // Sends an email of all the generated prices that have been added to the StringBuilder string.
@@ -107,3 +121,6 @@ static void CalculatePrices()
 
 // Calls the production method to begin running the program when the .exe is opened. 
 CalculatePrices();
+
+//// For testing purposes
+//BetweenTwoDates();

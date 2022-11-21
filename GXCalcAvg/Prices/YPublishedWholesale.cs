@@ -12,5 +12,7 @@ namespace PortlandPublishedCalculator.Prices
         public double? EthanolEurCbm { get; set; }
         public double? JetCifNwe { get; set; }
         public double? PropaneCifNwe { get; set; }
+        public double? HvoFrb { get; set; }
+        public double? HvoCifNwe { get; set; }
     }
 }

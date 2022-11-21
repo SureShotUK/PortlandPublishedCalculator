@@ -20,6 +20,7 @@ namespace PortlandPublishedCalculator.Utility
             MailMessage message = new();
             SmtpClient smtp = new();
             message.From = new MailAddress(creds.Username);
+            //message.To.Add(new MailAddress("miles@portland-fuel.co.uk"));
             message.To.Add(new MailAddress("it@portland-fuel.co.uk"));
             message.To.Add(new MailAddress("analytics@portland-fuel.co.uk"));
             if (ErrorChecker == true) { message.Subject = "ERROR: Portland Published Wholesale Calculator"; }

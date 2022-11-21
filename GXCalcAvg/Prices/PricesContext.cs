@@ -18,10 +18,14 @@ namespace PortlandPublishedCalculator.Prices
         }
 
         public virtual DbSet<PrimaForwardPrice> PrimaForwardPrices { get; set; } = null!;
+        public virtual DbSet<PrimaSpotPrice> PrimaSpotPrices { get; set; } = null!;
         public virtual DbSet<YArgusomrBiofuelsNewer> YArgusomrBiofuelsNewers { get; set; } = null!;
+        public virtual DbSet<YArgusomrThg> YArgusomrThgs { get; set; } = null!;
         public virtual DbSet<YFteur> YFteurs { get; set; } = null!;
         public virtual DbSet<YFtgbp> YFtgbps { get; set; } = null!;
         public virtual DbSet<YGimid> YGimids { get; set; } = null!;
+        public virtual DbSet<YHvoBlendPercentage> YHvoBlendPercentages { get; set; } = null!;
+        public virtual DbSet<YHvoProductionCost> YHvoProductionCosts { get; set; } = null!;
         public virtual DbSet<YPublishedWholesale> YPublishedWholesales { get; set; } = null!;
         public virtual DbSet<YSupplierPrice> YSupplierPrices { get; set; } = null!;
         public virtual DbSet<ZIcefutLsg> ZIcefutLsgs { get; set; } = null!;
@@ -31,7 +35,7 @@ namespace PortlandPublishedCalculator.Prices
             if (!optionsBuilder.IsConfigured)
             {
                 var creds = Credentials.GetExternalDBCreds();
-                optionsBuilder.UseNpgsql($"Server={creds.DatabaseExternalHost};Database=prices;User Id={creds.DatabaseUserName};Password={creds.DatabasePassword};Port={creds.DatabaseExternalPortNumber}");            
+                optionsBuilder.UseNpgsql($"Server={creds.DatabaseExternalHost};Database=prices;User Id={creds.DatabaseUserName};Password={creds.DatabasePassword};Port={creds.DatabaseExternalPortNumber}");
             }
         }
 
@@ -61,6 +65,26 @@ namespace PortlandPublishedCalculator.Prices
                 entity.Property(e => e.Delivery)
                     .HasColumnType("character varying")
                     .HasColumnName("delivery");
+
+                entity.Property(e => e.Price).HasColumnName("price");
+            });
+
+            modelBuilder.Entity<PrimaSpotPrice>(entity =>
+            {
+                entity.HasKey(e => new { e.PublishedDate, e.Grade, e.Currency })
+                    .HasName("prima_spot_price_pkey");
+
+                entity.ToTable("prima_spot_price");
+
+                entity.Property(e => e.PublishedDate).HasColumnName("published_date");
+
+                entity.Property(e => e.Grade)
+                    .HasColumnType("character varying")
+                    .HasColumnName("grade");
+
+                entity.Property(e => e.Currency)
+                    .HasColumnType("character varying")
+                    .HasColumnName("currency");
 
                 entity.Property(e => e.Price).HasColumnName("price");
             });
@@ -101,6 +125,24 @@ namespace PortlandPublishedCalculator.Prices
                 entity.Property(e => e.Ucome).HasColumnName("ucome");
 
                 entity.Property(e => e.UcomeChange).HasColumnName("ucome_change");
+            });
+
+            modelBuilder.Entity<YArgusomrThg>(entity =>
+            {
+                entity.HasKey(e => new { e.PublishedDate, e.Grade })
+                    .HasName("y_argusomr_thg_pkey");
+
+                entity.ToTable("y_argusomr_thg");
+
+                entity.Property(e => e.PublishedDate).HasColumnName("published_date");
+
+                entity.Property(e => e.Grade)
+                    .HasColumnType("character varying")
+                    .HasColumnName("grade");
+
+                entity.Property(e => e.High).HasColumnName("high");
+
+                entity.Property(e => e.Low).HasColumnName("low");
             });
 
             modelBuilder.Entity<YFteur>(entity =>
@@ -733,6 +775,34 @@ namespace PortlandPublishedCalculator.Prices
                 entity.Property(e => e.Gx0000686).HasColumnName("gx0000686");
             });
 
+            modelBuilder.Entity<YHvoBlendPercentage>(entity =>
+            {
+                entity.HasKey(e => e.PublishedDate)
+                    .HasName("y_hvo_blend_percentages_pk");
+
+                entity.ToTable("y_hvo_blend_percentages");
+
+                entity.Property(e => e.PublishedDate).HasColumnName("published_date");
+
+                entity.Property(e => e.Diesel).HasColumnName("diesel");
+
+                entity.Property(e => e.Fame).HasColumnName("fame");
+
+                entity.Property(e => e.Hvo).HasColumnName("hvo");
+            });
+
+            modelBuilder.Entity<YHvoProductionCost>(entity =>
+            {
+                entity.HasKey(e => e.PublishedDate)
+                    .HasName("y_hvo_production_cost_pk");
+
+                entity.ToTable("y_hvo_production_cost");
+
+                entity.Property(e => e.PublishedDate).HasColumnName("published_date");
+
+                entity.Property(e => e.ProductionCost).HasColumnName("production_cost");
+            });
+
             modelBuilder.Entity<YPublishedWholesale>(entity =>
             {
                 entity.HasKey(e => e.PublishedDate)
@@ -747,6 +817,10 @@ namespace PortlandPublishedCalculator.Prices
                 entity.Property(e => e.EthanolEurCbm).HasColumnName("ethanol_eur_cbm");
 
                 entity.Property(e => e.Fame10).HasColumnName("fame-10");
+
+                entity.Property(e => e.HvoCifNwe).HasColumnName("hvo_cif_nwe");
+
+                entity.Property(e => e.HvoFrb).HasColumnName("hvo_frb");
 
                 entity.Property(e => e.JetCifNwe).HasColumnName("jet_cif_nwe");
 

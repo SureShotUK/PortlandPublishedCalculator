@@ -19,6 +19,8 @@ namespace PortlandPublishedCalculator.Calculations
             Grade.ethanol => Calculations.Portland_Ethanol_EUR_CBM(date),
             Grade.jet => Calculations.Portland_Jet_CIF_NWE(date),
             Grade.propane => Calculations.Portland_Propane_CIF_NWE(date),
+            Grade.hvo_frb => Calculations.Portland_HVO_FRB(date),
+            Grade.hvo_cif_nwe => Calculations.Portland_HVO_CIF_NWE(date),
             _ => null,
         };
     }

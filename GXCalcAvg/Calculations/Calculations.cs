@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using PortlandPublishedCalculator.DatabaseQueries;
 using PortlandPublishedCalculator.Dates;
+using PortlandPublishedCalculator.Utility;
 
 
 
@@ -25,10 +27,20 @@ namespace PortlandPublishedCalculator.Calculations
             else { lsg_previous = Retrieve.LSG(previous_date); };
 
             // Data retrieval from database
-            double? gxprice = Retrieve.GX_Price(date);
+            double? gxprice = Retrieve.GX_Diesel_Price(date);
             double? ineos = Retrieve.Ineos_DollarPerMT(date);
             double? ukf = Retrieve.UKF_DollarPerMT(date);
             double? prax = Retrieve.Prax_DollarPerMT(date);
+
+            // Debug logger that writes to a .txt file in the current working directory.
+            // Currently being used to tweak the Portland Diesel Price. 
+            DebugLogger.WriteLine(
+                "Starting program @ " + DateTime.Now.ToString() + "\n" +
+                "The following prices have been retrieved for the Diesel CIF NWE calculation: " +
+                "lsg: " + lsg + "\n" + "lsg_previous: " + lsg_previous + "\n" + "gxprice: " 
+                + gxprice + "\n" + "ineos: " + ineos + "\n" + "ukf: " + ukf + "\n" + "prax: " + prax + "\n"
+                );
+            DebugLogger.SaveLog();
 
             // Rule: if there is no LSG for the given date, return the GXPrice as the Portland Diesel price - if there is no GXPrice, return null.
             if (lsg == null || lsg == 0)
@@ -214,6 +226,43 @@ namespace PortlandPublishedCalculator.Calculations
                 // Else, if both are null for a given date, return null:
                 else { return null; }
             }
+        }
+        // Calculates the Portland HVO CIF NWE price for a given date
+        public static double? Portland_HVO_FRB(DateOnly date)
+        {
+            double? hvo_production_cost = Retrieve.HVO_Production_Cost(date);
+            double? prima_t1_uco_cif_ara = Retrieve.Prima_T1_UCO_CIF_ARA(date);
+            double? diesel_cif_nwe = Retrieve.Diesel_CIF_NWE(date);
+            double? hvo_blend_percentage = Retrieve.HVO_Blend_Percentages(date);
+            double? argusomr_thg_konventionelle = Retrieve.ArgusOMR_THG_Konventionelle(date);
+            double? gbp_eur = Retrieve.FTGbp_To_Eur(date);
+            double? gbp_usd = Retrieve.FTGbp_To_Usd(date);
+            double? argusomr_hvo_class_ii = Retrieve.ArgusOMR_HVO_Class_II(date);
+            double? prima_hvo_plant = Retrieve.Prima_HVO_Plant(date);
+
+            // if any of the retrieved values are null, then return null as all are necessary to creating following steps.
+            if (hvo_production_cost == null || hvo_production_cost == 0 ||prima_t1_uco_cif_ara == null || prima_t1_uco_cif_ara == 0
+                || diesel_cif_nwe == null || diesel_cif_nwe == 0 || hvo_blend_percentage == null || hvo_blend_percentage == 0 ||
+                argusomr_thg_konventionelle == null || argusomr_thg_konventionelle == 0 || gbp_eur == null || gbp_eur == 0 ||
+                gbp_usd == null || gbp_usd == 0 || argusomr_hvo_class_ii == null || argusomr_hvo_class_ii == 0 || prima_hvo_plant == null || prima_hvo_plant == 0) 
+            { return null; }
+
+            double? hvo_uco = hvo_production_cost + prima_t1_uco_cif_ara;
+            double? hvo_coc = ( ((hvo_blend_percentage * 3.4141) * (argusomr_thg_konventionelle / gbp_eur) / 10 / hvo_blend_percentage)
+                + (diesel_cif_nwe / gbp_usd / 11.83) ) * gbp_usd * 11.83;
+            double? supplier_quotes = ExcelAverage(argusomr_hvo_class_ii, prima_hvo_plant);
+            double? hvo_frb = Math.Round(ExcelAverage(hvo_uco, hvo_coc, supplier_quotes) * 4, 0, MidpointRounding.AwayFromZero) / 4;
+
+            return hvo_frb;
+        }
+        public static double? Portland_HVO_CIF_NWE(DateOnly date)
+        {
+            double? hvo_frb = Retrieve.Portland_HVO_FRB(date);
+            if (hvo_frb == null) { return null; }
+            double? gx093 = Retrieve.GX_093(date);
+            double? gx258 = Retrieve.GX_258(date);
+            double? hvo_cif_nwe = hvo_frb + (gx093 - gx258);
+            return hvo_cif_nwe;
         }
     }
 }
