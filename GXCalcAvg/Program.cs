@@ -22,7 +22,7 @@ static void BetweenTwoDates()
 {
     //yy - mm - dd format:
     DateOnly startDate = new(2022, 07, 18);
-    DateOnly endDate = new(2022, 11, 18);
+    DateOnly endDate = new(2022, 11, 21);
 
     DateOnly date = Date.WorkingDayCheck(startDate);
     while (date <= endDate)
@@ -56,7 +56,7 @@ static void BetweenTwoDates()
         //if (portland_ethanol_eur_cbm.HasValue)
         //{
         //    Console.WriteLine("The Portland Ethanol EUR CBM Price for " + date + " is " + portland_ethanol_eur_cbm);
-        //    // UploadToDB.YPublishedWholesale(date, portland_ethanol_eur_cbm, "ethanol");
+        //    UploadToDB.YPublishedWholesale(date, portland_ethanol_eur_cbm, "ethanol");
         //}
 
         //// Calculates the Portland Jet CIF NWE price for a given date.
@@ -79,14 +79,15 @@ static void BetweenTwoDates()
         if (portland_hvo_frb.HasValue)
         {
             Console.WriteLine("The Portland HVO FRB Price for " + date + " is " + portland_hvo_frb);
-            //UploadToDB.YPublishedWholesale(date, portland_hvo_frb, "hvo_frb");
+            UploadToDB.YPublishedWholesale(date, portland_hvo_frb, "hvo_frb");
         }
+
         // Calculates the Portland HVO CIF NWE price for a given date.
         double? portland_hvo_cif_nwe = Calculations.Portland_HVO_CIF_NWE(date);
         if (portland_hvo_cif_nwe.HasValue)
         {
             Console.WriteLine("The Portland HVO CIF NWE Price for " + date + " is " + portland_hvo_cif_nwe);
-            //UploadToDB.YPublishedWholesale(date, portland_hvo_cif_nwe, "hvo_cif_nwe");
+            UploadToDB.YPublishedWholesale(date, portland_hvo_cif_nwe, "hvo_cif_nwe");
         }
 
         date = Date.NextWorkingDay(date); //Goes to the following working day. 

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace PortlandPublishedCalculator.Utility
 {
     public class GradesEnum
-    {
+    {   
+        // The following enum includes each of the grades that this progam will cycle through
+        // When a new grade is added to the program, it must be added here
         public enum Grade
         {
             diesel,
