@@ -26,7 +26,7 @@ namespace PortlandPublishedCalculator.Utility
             return new Grade[]
             {
                 Grade.diesel,
-                Grade.fame,
+                Grade.fame, 
                 Grade.petrol,
                 Grade.ethanol,
                 Grade.jet,

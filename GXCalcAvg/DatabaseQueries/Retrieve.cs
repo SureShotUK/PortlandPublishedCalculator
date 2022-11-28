@@ -338,10 +338,17 @@ namespace PortlandPublishedCalculator.DatabaseQueries
         // Retrieves the most recent Prima T1 price that is the same date or less than the specified date.
         public static double? Prima_T1_UCO_CIF_ARA(DateOnly date)
         {
-            double? prima_t1_uco_cif_ara = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
+            try
+            {
+                double? prima_t1_uco_cif_ara = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
                 .Where(x => x.PublishedDate <= date && x.Grade == "T1 UCO CIF ARA").Select(x => x.Price).Last();
 
-            return prima_t1_uco_cif_ara;
+                return prima_t1_uco_cif_ara;
+            }
+            catch
+            {
+                return null;
+            }
         }
         // Retrieves the HVO Blend Percentage for the given date from the hvo_blend_percentages table in the database
         public static double? HVO_Blend_Percentages(DateOnly date)
@@ -433,9 +440,13 @@ namespace PortlandPublishedCalculator.DatabaseQueries
         // Retrieves the most recent Prima HVO Plant price from the prima_spot_price table in the database
         public static double? Prima_HVO_Plant(DateOnly date)
         {
-            double? prima_hvo_plant = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
+            try
+            {
+                double? prima_hvo_plant = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
                 .Where(x => x.PublishedDate <= date && x.Grade == "HVO Plant (UCO Input)").Select(x => x.Price).Last();
-            return prima_hvo_plant;
+                return prima_hvo_plant;
+            }
+            catch { return null; }
         }
         // Retrieves the Published Portland HVO FRB price for the given date
         public static double? Portland_HVO_FRB(DateOnly date)
