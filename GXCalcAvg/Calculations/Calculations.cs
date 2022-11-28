@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace PortlandPublishedCalculator.Calculations
     public class Calculations
     {
         // Calculates the Portland Diesel CIF NWE price for a given date. 
-        public static double? Portland_Diesel_CIF_NWE(DateOnly date)
+        public static double? Portland_Diesel_CIF_NWE(DateOnly date, bool sendDebugEmail)
         {
             // Retrieves the most recent working day prior to the date specified that has a published Portland Diesel Price and an LSG value. 
             DateOnly previous_date = Retrieve.MostRecentDieselAndLSG(date);
@@ -32,16 +33,23 @@ namespace PortlandPublishedCalculator.Calculations
             double? ineos = Retrieve.Ineos_DollarPerMT(previous_date);
             double? ukf = Retrieve.UKF_DollarPerMT(previous_date);
             double? prax = Retrieve.Prax_DollarPerMT(previous_date);
-
-            // Debug logger that writes to a .txt file in the current working directory.
-            // Currently being used to tweak the Portland Diesel Price. 
-            DebugLogger.WriteLine(
-                "Starting program @ " + DateTime.Now.ToString() + "\n" +
-                "The following prices have been retrieved for the Diesel CIF NWE calculation: " +
-                "lsg: " + lsg + "\n" + "lsg_previous: " + lsg_previous + "\n" + "gxprice: " 
-                + gxprice + "\n" + "ineos: " + ineos + "\n" + "ukf: " + ukf + "\n" + "prax: " + prax + "\n"
-                );
-            DebugLogger.SaveLog();
+            
+            // If enabled, will send the debug email for the Portland Diesel CIF NWE calculation. 
+            if (sendDebugEmail)
+            {
+                Email.SendDieselDebugEmail(@$"<html> 
+                <body>
+                <p>The following prices were used in the Portland Diesel CIF NWE calculation:</p>
+                <hr>
+                <p><strong>LSG: </strong>{lsg}</p>
+                <p><strong>LSG for Previous Day: </strong>{lsg_previous}</p>
+                <p><strong>GXPrice: </strong>{ineos}</p>
+                <p><strong>Ineos: </strong>{ineos}</p>
+                <p><strong>UKF: </strong>{ukf}</p>
+                <p><strong>Prax: </strong>{prax}</p>
+                </body>
+                </html>");
+            } 
 
             // Rule: if there is no LSG for the given date, return the GXPrice as the Portland Diesel price - if there is no GXPrice, return null.
             if (IsValueNullOr0(lsg))

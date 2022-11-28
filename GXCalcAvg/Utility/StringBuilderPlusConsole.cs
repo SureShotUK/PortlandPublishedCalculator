@@ -13,16 +13,16 @@ namespace PortlandPublishedCalculator.Utility
         public static void WriteLine(string str)
         {
             Console.WriteLine(str);
-            LogString.Append(str + "<br>");
+            LogString.Append("<p>" + str + "</p>");
         }
         // Only appends a new string line to the StringBuilder string - will not be printed to console.
         public static void WriteLineSBOnly(string str)
         {
-            LogString.Append(str + "<br>");
+            LogString.Append(str);
         }
         public static void GradeAppend(string gradename, double? price)
         {
-            LogString.Append("<b>" + gradename + ": " + "</b>" + price + ",<br>");
+            LogString.Append("<p>" + "<b>" + gradename + ": " + "</b>" + price + "</p>");
             Console.WriteLine(gradename + ": " + price);
         }
         public static StringBuilder GetLogString()

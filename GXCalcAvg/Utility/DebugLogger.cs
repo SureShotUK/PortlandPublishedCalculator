@@ -11,6 +11,7 @@ namespace PortlandPublishedCalculator.Utility
         // This is a function to write strings to a local .txt file
         // This is used to debug the Portland Diesel CIF NWE calculation, as we can record what each of the variables that go into the calculation
         // equal when it is automated in the morning. 
+        // Currently, this is not being used as instead we are having the prices that go into the calculation be sent via email to me and Mike. 
         private readonly static StringBuilder DebugLogString = new();
         public static void WriteLine(string str)
         {

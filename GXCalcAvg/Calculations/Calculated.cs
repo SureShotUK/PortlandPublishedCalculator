@@ -13,7 +13,7 @@ namespace PortlandPublishedCalculator.Calculations
         // A switch statement used to retrieve the Portland Published price for the grades
         public static double? Price(Grade grade, DateOnly date) => (grade) switch
         {
-            Grade.diesel => Calculations.Portland_Diesel_CIF_NWE(date),
+            Grade.diesel => Calculations.Portland_Diesel_CIF_NWE(date, true),
             Grade.fame => Calculations.Portland_FAME_minus_ten(date),
             Grade.petrol => Calculations.Portland_Unleaded_CIF_NWE(date),
             Grade.ethanol => Calculations.Portland_Ethanol_EUR_CBM(date),
