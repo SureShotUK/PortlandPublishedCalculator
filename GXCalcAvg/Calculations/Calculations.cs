@@ -28,11 +28,11 @@ namespace PortlandPublishedCalculator.Calculations
             else { lsg_previous = Retrieve.LSG(previous_date); };
 
             // Data retrieval from database
-            double? gxprice = Retrieve.GX_Diesel_Price(date);
+            double? gxprice = Retrieve.GX_Diesel(date);
             // Retrieve the supplier quote prices from the PREVIOUS working date
-            double? ineos = Retrieve.Ineos_DollarPerMT(previous_date);
-            double? ukf = Retrieve.UKF_DollarPerMT(previous_date);
-            double? prax = Retrieve.Prax_DollarPerMT(previous_date);
+            double? ineos = Retrieve.Diesel_Ineos_SupQuote(previous_date);
+            double? ukf = Retrieve.Diesel_UKF_SupQuote(previous_date);
+            double? prax = Retrieve.Diesel_Prax_SupQuote(previous_date);
             
             // If enabled, will send the debug email for the Portland Diesel CIF NWE calculation. 
             if (sendDebugEmail)
@@ -214,8 +214,41 @@ namespace PortlandPublishedCalculator.Calculations
         // Retrieves the GX Unleaded Petrol price to be used as the Portland Published Unleaded CIF NWE price
         public static double? Portland_Unleaded_CIF_NWE(DateOnly date)
         {
-            double? price = Retrieve.GX_Unleaded_Petrol(date);
-            return price;
+            DateOnly previous_date = Date.PreviousWorkingDay(date);
+
+            double? lsg = Retrieve.LSG(date);
+            double? lsg_previous;
+            // Is date the rollover date for LSG contracts? If so, lsg_previous is M002 of previous_date, not M001
+            if (Date.IsDateIceLSGRolloverDay(date) == true) { lsg_previous = Retrieve.LSGBeforeRollover(previous_date); }
+            else { lsg_previous = Retrieve.LSG(previous_date); };
+
+            double? ukf_unleaded = Retrieve.Unleaded_UKF_SupQuote(previous_date);
+            double? unleaded_gx_price = Retrieve.GX_Unleaded_Petrol(date);
+
+            // If LSG or the previous working date's LSG value is null, then:
+            if (IsValueNullOr0(lsg) || IsValueNullOr0(lsg_previous))
+            {   
+                // if there is a GX Price for the given date, return that:
+                if (IsValueNullOr0(unleaded_gx_price)) { return unleaded_gx_price; }
+                // else, a value cannot be generated, so return null. 
+                else { return null; }
+            }
+            // if there is a supplier quote in the database for the given date:
+            if (!IsValueNullOr0(ukf_unleaded))
+            {
+                double? supCalc = ukf_unleaded + (lsg - lsg_previous);
+                double price = Math.Round(ExcelAverage(Convert.ToDouble(supCalc), Convert.ToDouble(unleaded_gx_price)) * 4, 0, MidpointRounding.AwayFromZero) / 4;
+                return price;
+            }
+            // else if there is not a supplier quote in the database for the given date:
+            else
+            {   
+                double? previousPortlandUnleaded = Retrieve.Previous_Portland_Unleaded_CIF_NWE(date);
+                if (IsValueNullOr0(previousPortlandUnleaded)) { return unleaded_gx_price; };
+                double? supCalc = previousPortlandUnleaded + (lsg - lsg_previous);
+                double? price = Math.Round(ExcelAverage(Convert.ToDouble(supCalc), Convert.ToDouble(unleaded_gx_price)) * 4, 0, MidpointRounding.AwayFromZero) / 4;
+                return price; 
+            }
         }
         // Retrieves the GX Jet price to be used as the Portland Published Jet CIF NWE price
         public static double? Portland_Jet_CIF_NWE(DateOnly date)

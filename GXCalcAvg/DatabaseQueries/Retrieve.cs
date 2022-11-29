@@ -101,7 +101,7 @@ namespace PortlandPublishedCalculator.DatabaseQueries
             }
         }
         // Retrieves the diesel GX_Price used in the Portland Diesel CIF NWE calculation
-        public static double? GX_Diesel_Price(DateOnly date)
+        public static double? GX_Diesel(DateOnly date)
         {   
             try
             {
@@ -114,7 +114,7 @@ namespace PortlandPublishedCalculator.DatabaseQueries
             }
 
         }
-        public static double? Prax_DollarPerMT(DateOnly date)
+        public static double? Diesel_Prax_SupQuote(DateOnly date)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace PortlandPublishedCalculator.DatabaseQueries
                 return null;
             }
         }
-        public static double? Ineos_DollarPerMT(DateOnly date)
+        public static double? Diesel_Ineos_SupQuote(DateOnly date)
         {   
             try
             {
@@ -139,19 +139,27 @@ namespace PortlandPublishedCalculator.DatabaseQueries
             }
 
         }
-
-        public static double? UKF_DollarPerMT(DateOnly date)
+        public static double? Diesel_UKF_SupQuote(DateOnly date)
         {   
             try
             {
-                double? ukf = db.YSupplierPrices.Where(x => x.PublishedDate == date && x.SupplierId == 2 && x.GradeId == 1).Select(x => x.Price).First();
-                return ukf;
+                double? diesel_ukf = db.YSupplierPrices.Where(x => x.PublishedDate == date && x.SupplierId == 2 && x.GradeId == 1).Select(x => x.Price).First();
+                return diesel_ukf;
             }
             catch
             {
                 return null;
             }
 
+        }
+        public static double? Unleaded_UKF_SupQuote(DateOnly date)
+        {
+            try
+            {
+                double? unleaded_ukf = db.YSupplierPrices.Where(x => x.PublishedDate == date && x.SupplierId == 2 && x.GradeId == 7).Select(x => x.Price).First();
+                return unleaded_ukf;
+            }
+            catch { return null; }
         }
         // Retrieves the Portland Diesel CIF NWE price from the database for a given date. Used when we need to retrieve and use the previously published Portland Diesel Price.
         public static double? Portland_Diesel_Price(DateOnly date)
@@ -166,6 +174,7 @@ namespace PortlandPublishedCalculator.DatabaseQueries
                 return null;
             }
         }
+        // Retrieves the previous Portland Published FAME-10 price from a given date 
         public static double? Previous_Portland_FAME_minus_10(DateOnly date)
         {
             try
@@ -174,10 +183,18 @@ namespace PortlandPublishedCalculator.DatabaseQueries
                 double? previous_Portland_FAME_minus_10 = db.YPublishedWholesales.Where(x => x.PublishedDate == previousWorkingDate).Select(x => x.Fame10).First();
                 return previous_Portland_FAME_minus_10;
             }
-            catch
+            catch { return null; }
+        }
+        // Retrieves the previous Portland Published Unleaded CIF NWE price from a given date 
+        public static double? Previous_Portland_Unleaded_CIF_NWE(DateOnly date)
+        {
+            try
             {
-                return null;
+                DateOnly previousWorkingDate = Date.PreviousWorkingDay(date);
+                double? previous_portland_unleaded = db.YPublishedWholesales.Where(x => x.PublishedDate == previousWorkingDate).Select(x => x.UnleadedCifNwe).First();
+                return previous_portland_unleaded;
             }
+            catch { return null; }
         }
         public static double? Prima_FAME_minus_ten(DateOnly date)
         {
