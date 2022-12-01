@@ -185,6 +185,17 @@ namespace PortlandPublishedCalculator.DatabaseQueries
             }
             catch { return null; }
         }
+        // Retrieves the previous Portland Published Ethanol EUR CBM price from a given date
+        public static double? Previous_Portland_Ethanol_EUR_CBM(DateOnly date)
+        {
+            try
+            {
+                DateOnly previousWorkingDate = Date.PreviousWorkingDay(date);
+                double? previous_portland_ethanol_eur_cbm = db.YPublishedWholesales.Where(x => x.PublishedDate == previousWorkingDate).Select(x => x.EthanolEurCbm).First();
+                return previous_portland_ethanol_eur_cbm;
+            }
+            catch { return null; }
+        }
         // Retrieves the previous Portland Published Unleaded CIF NWE price from a given date 
         public static double? Previous_Portland_Unleaded_CIF_NWE(DateOnly date)
         {
@@ -355,17 +366,11 @@ namespace PortlandPublishedCalculator.DatabaseQueries
         // Retrieves the most recent Prima T1 price that is the same date or less than the specified date.
         public static double? Prima_T1_UCO_CIF_ARA(DateOnly date)
         {
-            try
-            {
-                double? prima_t1_uco_cif_ara = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
+            // Will order the prima_spot_prices table by the published_date column, and then will find the first date that is less than or equal to the given date. 
+            // Will find the most recent price - not the one for the given date. This ensures a price is always found.
+            double? prima_t1_uco_cif_ara = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
                 .Where(x => x.PublishedDate <= date && x.Grade == "T1 UCO CIF ARA").Select(x => x.Price).Last();
-
-                return prima_t1_uco_cif_ara;
-            }
-            catch
-            {
-                return null;
-            }
+            return prima_t1_uco_cif_ara;
         }
         // Retrieves the HVO Blend Percentage for the given date from the hvo_blend_percentages table in the database
         public static double? HVO_Blend_Percentages(DateOnly date)
@@ -376,18 +381,14 @@ namespace PortlandPublishedCalculator.DatabaseQueries
         }
         // Retrieves the ArgusOMR THG Konventionelle low and high prices, and then creates an average of the two
         public static double? ArgusOMR_THG_Konventionelle(DateOnly date)
-        {
-            try
-            {
-                double? argusomr_thg_konventionelle_low = db.YArgusomrThgs.Where(x => x.PublishedDate == date && x.Grade == "Konventionelle").Select(x => x.Low).First();
-                double? argusomr_thg_konventionelle_high = db.YArgusomrThgs.Where(x => x.PublishedDate == date && x.Grade == "Konventionelle").Select(x => x.High).First();
-                double? avg = (argusomr_thg_konventionelle_low + argusomr_thg_konventionelle_high) / 2;
-                return avg;
-            }
-            catch
-            {
-                return null;
-            }
+        {   
+            // Retrieves the most recent date that has THG Konventionelle data - just incase there was no data for the given date. 
+            DateOnly mostRecentTHKonventionelleDate = db.YArgusomrThgs.OrderBy(x => x.PublishedDate).Where(x => x.PublishedDate <= date).Select(x => x.PublishedDate).Last();
+
+            double? argusomr_thg_konventionelle_low = db.YArgusomrThgs.Where(x => x.PublishedDate == mostRecentTHKonventionelleDate && x.Grade == "Konventionelle").Select(x => x.Low).First();
+            double? argusomr_thg_konventionelle_high = db.YArgusomrThgs.Where(x => x.PublishedDate == mostRecentTHKonventionelleDate && x.Grade == "Konventionelle").Select(x => x.High).First();
+            double? avg = (argusomr_thg_konventionelle_low + argusomr_thg_konventionelle_high) / 2;
+            return avg;
         }
         // Retrieves the GBP - EUR exchange rate for a given day from the y_ftgbps table in the database
         public static double? FTGbp_To_Eur(DateOnly date)
@@ -444,26 +445,20 @@ namespace PortlandPublishedCalculator.DatabaseQueries
         // Retrieves the ArgusOMR HVO Class II value from the y_argusomr_biofuels_newer table in the database
         public static double? ArgusOMR_HVO_Class_II(DateOnly date)
         {
-            try
-            {
-                double? argusomr_hvo_class_ii = db.YArgusomrBiofuelsNewers.Where(x => x.PublishedDate == date).Select(x => x.HvoClassIi).First();
-                return argusomr_hvo_class_ii;
-            }
-            catch 
-            { 
-                return null; 
-            }
+            // Will order the y_argusomr_biofuelds_newers table by the published_date column, and then will find the first date that is less than or equal to the given date. 
+            // Will find the most recent price - not the one for the given date. This ensures a price is always found.
+            double? argusomr_hvo_class_ii = db.YArgusomrBiofuelsNewers.OrderBy(x => x.PublishedDate).
+                Where(x => x.PublishedDate <= date).Select(x => x.HvoClassIi).Last();
+            return argusomr_hvo_class_ii;
         }
         // Retrieves the most recent Prima HVO Plant price from the prima_spot_price table in the database
         public static double? Prima_HVO_Plant(DateOnly date)
         {
-            try
-            {
-                double? prima_hvo_plant = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
-                .Where(x => x.PublishedDate <= date && x.Grade == "HVO Plant (UCO Input)").Select(x => x.Price).Last();
-                return prima_hvo_plant;
-            }
-            catch { return null; }
+            // Will order the prima_spot_prices table by the published_date column, and then will find the first date that is less than or equal to the given date. 
+            // Will find the most recent price - not the one for the given date. This ensures a price is always found.
+            double? prima_hvo_plant = db.PrimaSpotPrices.OrderBy(x => x.PublishedDate)
+            .Where(x => x.PublishedDate <= date && x.Grade == "HVO Plant (UCO Input)").Select(x => x.Price).Last();
+            return prima_hvo_plant;
         }
         // Retrieves the Published Portland HVO FRB price for the given date
         public static double? Portland_HVO_FRB(DateOnly date)

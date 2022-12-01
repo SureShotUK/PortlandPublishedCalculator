@@ -288,20 +288,28 @@ namespace PortlandPublishedCalculator.Calculations
                 { 
                     return Math.Round(Convert.ToDouble(argusomr_ethanol) * 4, 0, MidpointRounding.AwayFromZero) /4; 
                 }
-                // Else, if both are null for a given date, return null:
-                else { return null; }
+                // Else, if both are null for a given date, return the previous Portland Ethanol EUR CBM:
+                else
+                {
+                    double? previous_portland_ethanol_eur_cbm = Retrieve.Previous_Portland_Ethanol_EUR_CBM(date);
+                    return previous_portland_ethanol_eur_cbm;
+                }
             }
         }
         // Calculates the Portland HVO FRB price for a given date
         public static double? Portland_HVO_FRB(DateOnly date)
         {
             double? hvo_production_cost = Retrieve.HVO_Production_Cost(date);
-            double? prima_t1_uco_cif_ara = Retrieve.Prima_T1_UCO_CIF_ARA(date);
             double? diesel_cif_nwe = Retrieve.Diesel_CIF_NWE(date);
             double? hvo_blend_percentage = Retrieve.HVO_Blend_Percentages(date);
-            double? argusomr_thg_konventionelle = Retrieve.ArgusOMR_THG_Konventionelle(date);
+
             double? gbp_eur = Retrieve.FTGbp_To_Eur(date);
             double? gbp_usd = Retrieve.FTGbp_To_Usd(date);
+
+            // Data retrieved from Prima/ArgusOMR - each retrieval function will find the most recent price - not the one for the given date. This ensures a price is always found.
+            // In the case of the Argus/Prima program failing (which it routinely does...)
+            double? prima_t1_uco_cif_ara = Retrieve.Prima_T1_UCO_CIF_ARA(date);
+            double? argusomr_thg_konventionelle = Retrieve.ArgusOMR_THG_Konventionelle(date);
             double? argusomr_hvo_class_ii = Retrieve.ArgusOMR_HVO_Class_II(date);
             double? prima_hvo_plant = Retrieve.Prima_HVO_Plant(date);
 
