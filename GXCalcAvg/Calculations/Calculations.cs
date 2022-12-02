@@ -43,7 +43,7 @@ namespace PortlandPublishedCalculator.Calculations
                 <hr>
                 <p><strong>LSG: </strong>{lsg}</p>
                 <p><strong>LSG for Previous Day: </strong>{lsg_previous}</p>
-                <p><strong>GXPrice: </strong>{ineos}</p>
+                <p><strong>GXPrice: </strong>{gxprice}</p>
                 <p><strong>Ineos: </strong>{ineos}</p>
                 <p><strong>UKF: </strong>{ukf}</p>
                 <p><strong>Prax: </strong>{prax}</p>
