@@ -211,6 +211,27 @@ namespace PortlandPublishedCalculator.Calculations
                 return price;
             }
         }
+        // Calculates the Portland FAME0 price
+        public static double? Portland_FAME_Zero(DateOnly date)
+        {
+            // First, retrieve the ArgusOMR FAME0 and Prima FAME0 prices : 
+            double? argusOMR_FAME_Zero = Retrieve.ArgusOMR_FAME_Zero(date);
+            double? prima_FAME_Zero = Retrieve.Prima_FAME_Zero(date);
+
+            // If they are both null, then return the previous day's Portland FAME0 price:
+            if (IsValueNullOr0(argusOMR_FAME_Zero) && IsValueNullOr0(prima_FAME_Zero)) { return Retrieve.Previous_Portland_FAME_Zero(date); }
+
+            // If we have one of the values only, then return just that
+            if (!IsValueNullOr0(argusOMR_FAME_Zero) && IsValueNullOr0(prima_FAME_Zero)) { return argusOMR_FAME_Zero; }
+            if (IsValueNullOr0(argusOMR_FAME_Zero) && !IsValueNullOr0(prima_FAME_Zero)) { return prima_FAME_Zero; }
+
+            // Else, if we have both values, return an average of them both.
+            else
+            {
+                double? price = Math.Round(ExcelAverage(argusOMR_FAME_Zero, prima_FAME_Zero) * 4, 0, MidpointRounding.AwayFromZero) / 4;
+                return price;
+            }
+        }
         // Retrieves the GX Unleaded Petrol price to be used as the Portland Published Unleaded CIF NWE price
         public static double? Portland_Unleaded_CIF_NWE(DateOnly date)
         {

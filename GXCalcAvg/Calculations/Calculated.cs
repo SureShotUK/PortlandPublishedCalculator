@@ -14,7 +14,8 @@ namespace PortlandPublishedCalculator.Calculations
         public static double? Price(Grade grade, DateOnly date) => (grade) switch
         {
             Grade.diesel => Calculations.Portland_Diesel_CIF_NWE(date, true),
-            Grade.fame => Calculations.Portland_FAME_minus_ten(date),
+            Grade.fame_10 => Calculations.Portland_FAME_minus_ten(date),
+            Grade.fame0 => Calculations.Portland_FAME_Zero(date),
             Grade.petrol => Calculations.Portland_Unleaded_CIF_NWE(date),
             Grade.ethanol => Calculations.Portland_Ethanol_EUR_CBM(date),
             Grade.jet => Calculations.Portland_Jet_CIF_NWE(date),

@@ -21,8 +21,8 @@ using System.Text;
 static void BetweenTwoDates()
 {
     //yy - mm - dd format:
-    DateOnly startDate = new(2022, 11, 30);
-    DateOnly endDate = new(2022, 11, 30);
+    DateOnly startDate = new(2022, 03, 01);
+    DateOnly endDate = new(2022, 12, 01);
 
     DateOnly date = Date.WorkingDayCheck(startDate);
     while (date <= endDate)
@@ -41,9 +41,18 @@ static void BetweenTwoDates()
         //if (portland_fame_price.HasValue)
         //{
         //    Console.WriteLine("The Portland FAME-10 Price for " + date + " is " + portland_fame_price);
-        //    // UploadToDB.YPublishedWholesale(date, portland_fame_price, "fame"); //Uploads the price to the database.
-        //    // UploadToSiteground.YPublishedWholesale(date, portland_fame_price, "fame"); //Uploads the price to the siteground database.
+        //    // UploadToDB.YPublishedWholesale(date, portland_fame_price, "fame_10"); //Uploads the price to the database.
+        //    // UploadToSiteground.YPublishedWholesale(date, portland_fame_price, "fame_10"); //Uploads the price to the siteground database.
         //}
+
+        // Calculates the Portland FAME-10 price for a given date.
+        double? portland_fame0_price = Calculations.Portland_FAME_Zero(date);
+        if (portland_fame0_price.HasValue)
+        {
+            Console.WriteLine("The Portland FAME0 Price for " + date + " is " + portland_fame0_price);
+            // UploadToDB.YPublishedWholesale(date, portland_fame0_price, "fame0"); //Uploads the price to the database.
+            // UploadToSiteground.YPublishedWholesale(date, portland_fame0_price, "fame0"); //Uploads the price to the siteground database.
+        }
 
         //// Calculates the Portland Unleaded CIF NWE price for a given date.
         //double? portland_unleaded_petrol = Calculations.Portland_Unleaded_CIF_NWE(date);

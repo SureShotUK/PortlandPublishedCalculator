@@ -23,8 +23,11 @@ public class UploadToDB
                 case "diesel":
                     existingRow.DieselCifNwe = price;
                     break;
-                case "fame":
+                case "fame_10":
                     existingRow.Fame10 = price;
+                    break;
+                case "fame0":
+                    existingRow.Fame0 = price;
                     break;
                 case "petrol":
                     existingRow.UnleadedCifNwe = price;
@@ -58,8 +61,11 @@ public class UploadToDB
                 case "diesel":
                     ypw.DieselCifNwe = price;
                     break;
-                case "fame":
+                case "fame_10":
                     ypw.Fame10 = price;
+                    break;
+                case "fame0":
+                    ypw.Fame0 = price;
                     break;
                 case "petrol":
                     ypw.UnleadedCifNwe = price;

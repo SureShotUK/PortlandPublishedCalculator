@@ -13,7 +13,8 @@ namespace PortlandPublishedCalculator.Utility
         public enum Grade
         {
             diesel,
-            fame,
+            fame_10,
+            fame0,
             petrol,
             ethanol,
             jet,
@@ -26,7 +27,8 @@ namespace PortlandPublishedCalculator.Utility
             return new Grade[]
             {
                 Grade.diesel,
-                Grade.fame, 
+                Grade.fame_10,
+                Grade.fame0,
                 Grade.petrol,
                 Grade.ethanol,
                 Grade.jet,
@@ -40,7 +42,8 @@ namespace PortlandPublishedCalculator.Utility
         public static string GetGradeName(Grade grade) => (grade) switch
         {
             Grade.diesel => "Diesel CIF NWE",
-            Grade.fame => "FAME-10",
+            Grade.fame_10 => "FAME-10",
+            Grade.fame0 => "FAME0",
             Grade.petrol => "Unleaded CIF NWE",
             Grade.ethanol => "Ethanol EUR CBM",
             Grade.jet => "Jet CIF NWE",

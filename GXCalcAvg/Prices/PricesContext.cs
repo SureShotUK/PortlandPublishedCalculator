@@ -816,6 +816,8 @@ namespace PortlandPublishedCalculator.Prices
 
                 entity.Property(e => e.EthanolEurCbm).HasColumnName("ethanol_eur_cbm");
 
+                entity.Property(e => e.Fame0).HasColumnName("fame0");
+
                 entity.Property(e => e.Fame10).HasColumnName("fame-10");
 
                 entity.Property(e => e.HvoCifNwe).HasColumnName("hvo_cif_nwe");

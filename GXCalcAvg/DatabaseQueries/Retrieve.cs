@@ -185,6 +185,17 @@ namespace PortlandPublishedCalculator.DatabaseQueries
             }
             catch { return null; }
         }
+        // Retrieves the previous Portland Published FAME0 price from a given date
+        public static double? Previous_Portland_FAME_Zero(DateOnly date)
+        {
+            try
+            {
+                DateOnly previousWorkingDate = Date.PreviousWorkingDay(date);
+                double? previous_Portland_FAME_zero = db.YPublishedWholesales.Where(x => x.PublishedDate == previousWorkingDate).Select(x => x.Fame0).First();
+                return previous_Portland_FAME_zero;
+            }
+            catch { return null; }
+        }
         // Retrieves the previous Portland Published Ethanol EUR CBM price from a given date
         public static double? Previous_Portland_Ethanol_EUR_CBM(DateOnly date)
         {
@@ -245,6 +256,49 @@ namespace PortlandPublishedCalculator.DatabaseQueries
             {
                 double? argusOMR_FAME_minus_ten = db.YArgusomrBiofuelsNewers.Where(x => x.PublishedDate == date).Select(x => x.Fame10).First();
                 return argusOMR_FAME_minus_ten;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        // Retrieves the ArgusOMR Fame0 price for the Portland Published Fame0 price calc
+        public static double? ArgusOMR_FAME_Zero(DateOnly date)
+        {
+            try
+            {
+                double? argusOMR_FAME_zero = db.YArgusomrBiofuelsNewers.Where(x => x.PublishedDate == date).Select(x => x.Fame0).First();
+                return argusOMR_FAME_zero;
+            }
+            catch { return null; }
+        }
+        // Retrieves the Prima Forward Fame0 price for the Portland Published Fame0 price calc
+        public static double? Prima_FAME_Zero(DateOnly date)
+        {
+            try
+            {   // Need to find a FAME-10 price from prima_forward_prices where the published date's month is the same month as delivery 
+                // if the published date is the last day of the month, then the delivery month moves to the next month. 
+
+                double? prima_FAME_minus_ten;
+                string deliveryDate;
+
+                // if it is NOT the last day of the month:
+                if (!Date.IsDateLastDayOfMonth(date))
+                {
+                    deliveryDate = Date.DeliveryDateFormat(date);
+                    prima_FAME_minus_ten = db.PrimaForwardPrices.Where(x => x.PublishedDate == date && x.Grade == "RED FAME0" && x.Delivery == deliveryDate)
+                        .Select(x => x.Price).First();
+
+                    return prima_FAME_minus_ten;
+                }
+                // if it IS the last day of the month:
+                else
+                {
+                    deliveryDate = Date.DeliveryDateFormat(date.AddMonths(1));
+                    prima_FAME_minus_ten = db.PrimaForwardPrices.Where(x => x.PublishedDate == date && x.Grade == "RED FAME0" && x.Delivery == deliveryDate)
+                        .Select(x => x.Price).First();
+                    return prima_FAME_minus_ten;
+                }
             }
             catch
             {
