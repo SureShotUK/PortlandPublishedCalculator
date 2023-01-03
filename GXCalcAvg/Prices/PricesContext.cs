@@ -766,13 +766,19 @@ namespace PortlandPublishedCalculator.Prices
 
                 entity.Property(e => e.Gx0000084).HasColumnName("gx0000084");
 
+                entity.Property(e => e.Gx0000087).HasColumnName("gx0000087");
+
                 entity.Property(e => e.Gx0000093).HasColumnName("gx0000093");
 
                 entity.Property(e => e.Gx0000257).HasColumnName("gx0000257");
 
                 entity.Property(e => e.Gx0000258).HasColumnName("gx0000258");
 
+                entity.Property(e => e.Gx0000266).HasColumnName("gx0000266");
+
                 entity.Property(e => e.Gx0000686).HasColumnName("gx0000686");
+
+                entity.Property(e => e.Gx0001032).HasColumnName("gx0001032");
             });
 
             modelBuilder.Entity<YHvoBlendPercentage>(entity =>
@@ -814,17 +820,25 @@ namespace PortlandPublishedCalculator.Prices
 
                 entity.Property(e => e.DieselCifNwe).HasColumnName("diesel_cif_nwe");
 
+                entity.Property(e => e.DieselFrb).HasColumnName("diesel_frb");
+
                 entity.Property(e => e.EthanolEurCbm).HasColumnName("ethanol_eur_cbm");
 
                 entity.Property(e => e.Fame0).HasColumnName("fame0");
 
                 entity.Property(e => e.Fame10).HasColumnName("fame-10");
 
+                entity.Property(e => e.Fueloil35Frb).HasColumnName("fueloil_3.5%_frb");
+
+                entity.Property(e => e.Gasoil01CifNwe).HasColumnName("gasoil_0.1%_cif_nwe");
+
                 entity.Property(e => e.HvoCifNwe).HasColumnName("hvo_cif_nwe");
 
                 entity.Property(e => e.HvoFrb).HasColumnName("hvo_frb");
 
                 entity.Property(e => e.JetCifNwe).HasColumnName("jet_cif_nwe");
+
+                entity.Property(e => e.Mfo05Frb).HasColumnName("mfo_0.5%_frb");
 
                 entity.Property(e => e.PropaneCifNwe).HasColumnName("propane_cif_nwe");
 

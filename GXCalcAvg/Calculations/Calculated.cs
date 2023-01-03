@@ -22,6 +22,10 @@ namespace PortlandPublishedCalculator.Calculations
             Grade.propane => Calculations.Portland_Propane_CIF_NWE(date),
             Grade.hvo_frb => Calculations.Portland_HVO_FRB(date),
             Grade.hvo_cif_nwe => Calculations.Portland_HVO_CIF_NWE(date),
+            Grade.diesel_frb => Calculations.Portland_Diesel_FRB(date),
+            Grade.gasoil => Calculations.Portland_Gasoil1percent_CIF_NWE(date),
+            Grade.fueloil => Calculations.Portland_FuelOil3point5_FRB(date),
+            Grade.mfo => Calculations.Portland_Gasoil1percent_CIF_NWE(date),
             _ => null,
         };
     }

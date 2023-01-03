@@ -20,7 +20,11 @@ namespace PortlandPublishedCalculator.Utility
             jet,
             propane,
             hvo_frb,
-            hvo_cif_nwe
+            hvo_cif_nwe,
+            diesel_frb,
+            gasoil,
+            fueloil,
+            mfo
         }
         public static Grade[] GetAllGradesAsArray()
         {   
@@ -34,7 +38,11 @@ namespace PortlandPublishedCalculator.Utility
                 Grade.jet,
                 Grade.propane,
                 Grade.hvo_frb,
-                Grade.hvo_cif_nwe
+                Grade.hvo_cif_nwe,
+                Grade.diesel_frb,
+                Grade.gasoil,
+                Grade.fueloil,
+                Grade.mfo
 
             };
         }
@@ -50,6 +58,10 @@ namespace PortlandPublishedCalculator.Utility
             Grade.propane => "Propane CIF NWE",
             Grade.hvo_frb => "HVO FRB",
             Grade.hvo_cif_nwe => "HVO CIF NWE",
+            Grade.diesel_frb => "Diesel FRB",
+            Grade.gasoil => "GasOil 0.1% CIF NWE",
+            Grade.fueloil => "FuelOil 3.5% FRB",
+            Grade.mfo => "MFO 0.5% FRB",
             _ => ""
         };
     }

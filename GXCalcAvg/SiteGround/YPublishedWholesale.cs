@@ -15,5 +15,9 @@ namespace PortlandPublishedCalculator.SiteGround
         public double? HvoFrb { get; set; }
         public double? HvoCifNwe { get; set; }
         public double? Fame0 { get; set; }
+        public double? DieselFrb { get; set; }
+        public double? Gasoil01CifNwe { get; set; }
+        public double? Fueloil35Frb { get; set; }
+        public double? Mfo05Frb { get; set; }
     }
 }

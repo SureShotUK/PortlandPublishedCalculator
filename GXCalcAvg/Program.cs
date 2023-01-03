@@ -21,8 +21,8 @@ using System.Text;
 static void BetweenTwoDates()
 {
     //yy - mm - dd format:
-    DateOnly startDate = new(2022, 03, 01);
-    DateOnly endDate = new(2022, 12, 01);
+    DateOnly startDate = new(2022, 12, 29);
+    DateOnly endDate = new(2022, 12, 29);
 
     DateOnly date = Date.WorkingDayCheck(startDate);
     while (date <= endDate)
@@ -45,22 +45,22 @@ static void BetweenTwoDates()
         //    // UploadToSiteground.YPublishedWholesale(date, portland_fame_price, "fame_10"); //Uploads the price to the siteground database.
         //}
 
-        // Calculates the Portland FAME-10 price for a given date.
-        double? portland_fame0_price = Calculations.Portland_FAME_Zero(date);
-        if (portland_fame0_price.HasValue)
-        {
-            Console.WriteLine("The Portland FAME0 Price for " + date + " is " + portland_fame0_price);
-            // UploadToDB.YPublishedWholesale(date, portland_fame0_price, "fame0"); //Uploads the price to the database.
-            // UploadToSiteground.YPublishedWholesale(date, portland_fame0_price, "fame0"); //Uploads the price to the siteground database.
-        }
+        //// Calculates the Portland FAME-10 price for a given date.
+        //double? portland_fame0_price = Calculations.Portland_FAME_Zero(date);
+        //if (portland_fame0_price.HasValue)
+        //{
+        //    Console.WriteLine("The Portland FAME0 Price for " + date + " is " + portland_fame0_price);
+        //    // UploadToDB.YPublishedWholesale(date, portland_fame0_price, "fame0"); //Uploads the price to the database.
+        //    // UploadToSiteground.YPublishedWholesale(date, portland_fame0_price, "fame0"); //Uploads the price to the siteground database.
+        //}
 
         //// Calculates the Portland Unleaded CIF NWE price for a given date.
         //double? portland_unleaded_petrol = Calculations.Portland_Unleaded_CIF_NWE(date);
         //if (portland_unleaded_petrol.HasValue)
         //{
         //    Console.WriteLine("The Portland Unleaded CIF NWE Price for " + date + " is " + portland_unleaded_petrol);
-        //    // UploadToDB.YPublishedWholesale(date, portland_unleaded_petrol, "petrol"); //Uploads the price to the database.
-        //    // UploadToSiteground.YPublishedWholesale(date, portland_unleaded_petrol, "petrol"); //Uploads the price to the siteground database.
+        //    //UploadToDB.YPublishedWholesale(date, portland_unleaded_petrol, "petrol"); //Uploads the price to the database.
+        //    //UploadToSiteground.YPublishedWholesale(date, portland_unleaded_petrol, "petrol"); //Uploads the price to the siteground database.
         //}
 
         //// Calculates the Portland Ethanol EUR CBM price for a given date.
@@ -106,6 +106,42 @@ static void BetweenTwoDates()
         //    Console.WriteLine("The Portland HVO CIF NWE Price for " + date + " is " + portland_hvo_cif_nwe);
         //    // UploadToDB.YPublishedWholesale(date, portland_hvo_cif_nwe, "hvo_cif_nwe"); //Uploads the price to the database.
         //    // UploadToSiteground.YPublishedWholesale(date, portland_hvo_cif_nwe, "hvo_cif_nwe"); //Uploads the price to the siteground database.
+        //}
+
+        //// Calculates the Portland Diesel FRB price for a given date.
+        //double? portland_diesel_frb = Calculations.Portland_Diesel_FRB(date);
+        //if (portland_diesel_frb.HasValue)
+        //{
+        //    Console.WriteLine("The Portland Diesel FRB Price for " + date + " is " + portland_diesel_frb);
+        //    //UploadToDB.YPublishedWholesale(date, portland_diesel_frb, "diesel_frb"); //Uploads the price to the database.
+        //    //UploadToSiteground.YPublishedWholesale(date, portland_diesel_frb, "diesel_frb"); //Uploads the price to the siteground database.
+        //}
+
+        //// Calculates the Portland Gasoil price for a given date.
+        //double? portland_gasoil = Calculations.Portland_Gasoil1percent_CIF_NWE(date);
+        //if (portland_gasoil.HasValue)
+        //{
+        //    Console.WriteLine("The Portland Gasoil Price for " + date + " is " + portland_gasoil);
+        //    //UploadToDB.YPublishedWholesale(date, portland_gasoil, "gasoil"); //Uploads the price to the database.
+        //    //UploadToSiteground.YPublishedWholesale(date, portland_gasoil, "gasoil"); //Uploads the price to the siteground database.
+        //}
+
+        //// Calculates the Portland Fueloil price for a given date.
+        //double? portland_fueloil = Calculations.Portland_FuelOil3point5_FRB(date);
+        //if (portland_fueloil.HasValue)
+        //{
+        //    Console.WriteLine("The Portland Fueloil Price for " + date + " is " + portland_fueloil);
+        //    //UploadToDB.YPublishedWholesale(date, portland_fueloil, "fueloil"); //Uploads the price to the database.
+        //    //UploadToSiteground.YPublishedWholesale(date, portland_fueloil, "fueloil"); //Uploads the price to the siteground database.
+        //}
+
+        //// Calculates the Portland MFO price for a given date.
+        //double? portland_mfo = Calculations.Portland_MFO0point5_FRB(date);
+        //if (portland_mfo.HasValue)
+        //{
+        //    Console.WriteLine("The Portland MFO Price for " + date + " is " + portland_mfo);
+        //    //UploadToDB.YPublishedWholesale(date, portland_mfo, "mfo"); //Uploads the price to the database.
+        //    //UploadToSiteground.YPublishedWholesale(date, portland_mfo, "mfo"); //Uploads the price to the siteground database.
         //}
 
         date = Date.NextWorkingDay(date); //Goes to the following working day. 

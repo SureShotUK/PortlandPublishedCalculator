@@ -473,9 +473,36 @@ namespace PortlandPublishedCalculator.DatabaseQueries
         // Retrieves the GX Price for the 093 code from the y_gimid's table in the database
         public static double? GX_093(DateOnly date)
         {
+            // Will order the YGimids table by the published_date column, and then will find the first date that is less than or equal to the given date. 
+            // Will find the most recent price - not the one for the given date. This ensures a price is always found.
+            double? gxprice = db.YGimids.OrderBy(x => x.PublishedDate)
+                .Where(x => x.PublishedDate <= date).Select(x => x.Gx0000093).Last();
+            return gxprice;
+        }
+        // Retrieves the GX Price for the 258 code from the y_gimid's table in the database
+        public static double? GX_258(DateOnly date)
+        {
+            // Will order the YGimids table by the published_date column, and then will find the first date that is less than or equal to the given date. 
+            // Will find the most recent price - not the one for the given date. This ensures a price is always found.
+            double? gxprice = db.YGimids.OrderBy(x => x.PublishedDate)
+                .Where(x => x.PublishedDate <= date).Select(x => x.Gx0000258).Last();
+            return gxprice;
+        }
+        // Retrieves the GX Price for the 257 code from the y_gimid's table in the database
+        public static double? GX_257(DateOnly date)
+        {
+            // Will order the YGimids table by the published_date column, and then will find the first date that is less than or equal to the given date. 
+            // Will find the most recent price - not the one for the given date. This ensures a price is always found.
+            double? gxprice = db.YGimids.OrderBy(x => x.PublishedDate)
+                .Where(x => x.PublishedDate <= date).Select(x => x.Gx0000257).Last();
+            return gxprice;
+        }
+        // Retrieves the GX Price for the 082 code from the y_gimid's table in the database
+        public static double? GX_082(DateOnly date)
+        {
             try
             {
-                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000093).First();
+                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000082).First();
                 return gxprice;
             }
             catch
@@ -483,12 +510,25 @@ namespace PortlandPublishedCalculator.DatabaseQueries
                 return null;
             }
         }
-        // Retrieves the GX Price for the 258 code from the y_gimid's table in the database
-        public static double? GX_258(DateOnly date)
+        // Retrieves the GX Price for the 266 code from the y_gimid's table in the database
+        public static double? GX_266(DateOnly date)
         {
             try
             {
-                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000258).First();
+                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000266).First();
+                return gxprice;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        // Retrieves the GX Price for the 087 code from the y_gimid's table in the database
+        public static double? GX_087(DateOnly date)
+        {
+            try
+            {
+                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0000087).First();
                 return gxprice;
             }
             catch

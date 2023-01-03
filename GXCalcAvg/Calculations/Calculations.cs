@@ -357,6 +357,32 @@ namespace PortlandPublishedCalculator.Calculations
             double? hvo_cif_nwe = hvo_frb + (gx093 - gx258);
             return hvo_cif_nwe;
         }
+        // Calculates the Portland Diesel FRB price for a given date
+        public static double? Portland_Diesel_FRB(DateOnly date)
+        {
+            double? gx257 = Retrieve.GX_257(date);
+            double? gx258 = Retrieve.GX_258(date);
+            double? diesel_frb = Retrieve.Portland_Diesel_Price(date) - (gx257 - gx258);
+            return diesel_frb;
+        }
+        // Calculates the Portland Gasoil 1% CIF NWE price for a given date
+        public static double? Portland_Gasoil1percent_CIF_NWE(DateOnly date)
+        {
+            double? gasoil = Retrieve.GX_082(date);
+            return gasoil;
+        }
+        // Calculates the Portland FuelOil 3.5% FRB price for a given date
+        public static double? Portland_FuelOil3point5_FRB(DateOnly date)
+        {
+            double? fueloil = Retrieve.GX_266(date);
+            return fueloil;
+        }
+        // Calculates the Portland MFO 0.5% price for a given date
+        public static double? Portland_MFO0point5_FRB(DateOnly date)
+        {
+            double? mfo = Retrieve.GX_087(date);
+            return mfo;
+        }
         // A cleaner way of checking if a value is null or 0
         private static bool IsValueNullOr0(double? value)
         {

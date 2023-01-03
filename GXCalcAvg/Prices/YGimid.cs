@@ -16,5 +16,8 @@ namespace PortlandPublishedCalculator.Prices
         public double? Gx0000257 { get; set; }
         public double? Gx0000093 { get; set; }
         public double? Gx0000258 { get; set; }
+        public double? Gx0001032 { get; set; }
+        public double? Gx0000266 { get; set; }
+        public double? Gx0000087 { get; set; }
     }
 }

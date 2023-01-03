@@ -47,7 +47,18 @@ public class UploadToDB
                 case "hvo_cif_nwe":
                     existingRow.HvoCifNwe = price;
                     break;
-
+                case "diesel_frb":
+                    existingRow.DieselFrb = price;
+                    break;
+                case "gasoil":
+                    existingRow.Gasoil01CifNwe = price;
+                    break;
+                case "fueloil":
+                    existingRow.Fueloil35Frb = price;
+                    break;
+                case "mfo":
+                    existingRow.Mfo05Frb = price;
+                    break;
             }
             db.SaveChanges();
         }
@@ -84,6 +95,18 @@ public class UploadToDB
                     break;
                 case "hvo_cif_nwe":
                     ypw.HvoCifNwe = price;
+                    break;
+                case "diesel_frb":
+                    ypw.DieselFrb = price;
+                    break;
+                case "gasoil":
+                    ypw.Gasoil01CifNwe = price;
+                    break;
+                case "fueloil":
+                    ypw.Fueloil35Frb = price;
+                    break;
+                case "mfo":
+                    ypw.Mfo05Frb = price;
                     break;
             }
             ypw.PublishedDate = date;
