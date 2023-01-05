@@ -536,6 +536,19 @@ namespace PortlandPublishedCalculator.DatabaseQueries
                 return null;
             }
         }
+        // Retrieves the GX Price for the 1032 code from the y_gimid's table in the database
+        public static double? GX_1032(DateOnly date)
+        {
+            try
+            {
+                double? gxprice = db.YGimids.Where(x => x.PublishedDate == date).Select(x => x.Gx0001032).First();
+                return gxprice;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         // Retrieves the ArgusOMR HVO Class II value from the y_argusomr_biofuels_newer table in the database
         public static double? ArgusOMR_HVO_Class_II(DateOnly date)
         {

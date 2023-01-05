@@ -19,5 +19,6 @@ namespace PortlandPublishedCalculator.Prices
         public double? Gasoil01CifNwe { get; set; }
         public double? Fueloil35Frb { get; set; }
         public double? Mfo05Frb { get; set; }
+        public double? NyhDiesel { get; set; }
     }
 }

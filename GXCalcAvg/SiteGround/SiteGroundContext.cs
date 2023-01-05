@@ -61,6 +61,8 @@ namespace PortlandPublishedCalculator.SiteGround
 
                 entity.Property(e => e.Mfo05Frb).HasColumnName("mfo_0.5%_frb");
 
+                entity.Property(e => e.NyhDiesel).HasColumnName("nyh_diesel");
+
                 entity.Property(e => e.PropaneCifNwe).HasColumnName("propane_cif_nwe");
 
                 entity.Property(e => e.UnleadedCifNwe).HasColumnName("unleaded_cif_nwe");

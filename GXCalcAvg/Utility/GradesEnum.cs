@@ -24,7 +24,8 @@ namespace PortlandPublishedCalculator.Utility
             diesel_frb,
             gasoil,
             fueloil,
-            mfo
+            mfo,
+            nyh_diesel
         }
         public static Grade[] GetAllGradesAsArray()
         {   
@@ -42,7 +43,8 @@ namespace PortlandPublishedCalculator.Utility
                 Grade.diesel_frb,
                 Grade.gasoil,
                 Grade.fueloil,
-                Grade.mfo
+                Grade.mfo,
+                Grade.nyh_diesel
 
             };
         }
@@ -62,6 +64,7 @@ namespace PortlandPublishedCalculator.Utility
             Grade.gasoil => "GasOil 0.1% CIF NWE",
             Grade.fueloil => "FuelOil 3.5% FRB",
             Grade.mfo => "MFO 0.5% FRB",
+            Grade.nyh_diesel => "NYH Diesel",
             _ => ""
         };
     }

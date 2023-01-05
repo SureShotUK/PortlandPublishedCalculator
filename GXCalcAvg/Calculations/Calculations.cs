@@ -383,6 +383,12 @@ namespace PortlandPublishedCalculator.Calculations
             double? mfo = Retrieve.GX_087(date);
             return mfo;
         }
+        // Calculates the Portland NYH Diesel price for a given date
+        public static double? Portland_NYH_Diesel(DateOnly date)
+        {
+            double? gx1032 = Retrieve.GX_1032(date);
+            return gx1032;
+        }
         // A cleaner way of checking if a value is null or 0
         private static bool IsValueNullOr0(double? value)
         {

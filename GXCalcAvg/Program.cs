@@ -21,8 +21,8 @@ using System.Text;
 static void BetweenTwoDates()
 {
     //yy - mm - dd format:
-    DateOnly startDate = new(2022, 12, 29);
-    DateOnly endDate = new(2022, 12, 29);
+    DateOnly startDate = new(2022, 07, 18);
+    DateOnly endDate = new(2023, 01, 04);
 
     DateOnly date = Date.WorkingDayCheck(startDate);
     while (date <= endDate)
@@ -140,9 +140,18 @@ static void BetweenTwoDates()
         //if (portland_mfo.HasValue)
         //{
         //    Console.WriteLine("The Portland MFO Price for " + date + " is " + portland_mfo);
-        //    //UploadToDB.YPublishedWholesale(date, portland_mfo, "mfo"); //Uploads the price to the database.
-        //    //UploadToSiteground.YPublishedWholesale(date, portland_mfo, "mfo"); //Uploads the price to the siteground database.
+        //    // UploadToDB.YPublishedWholesale(date, portland_mfo, "mfo"); //Uploads the price to the database.
+        //    // UploadToSiteground.YPublishedWholesale(date, portland_mfo, "mfo"); //Uploads the price to the siteground database.
         //}
+
+        // Calculates the NYH Diesel price for a given date.
+        double? portland_nyh_diesel = Calculations.Portland_NYH_Diesel(date);
+        if (portland_nyh_diesel.HasValue)
+        {
+            Console.WriteLine("The Portland NYH Diesel Price for " + date + " is " + portland_nyh_diesel);
+            // UploadToDB.YPublishedWholesale(date, portland_nyh_diesel, "nyh_diesel"); //Uploads the price to the database.
+            // UploadToSiteground.YPublishedWholesale(date, portland_nyh_diesel, "nyh_diesel"); //Uploads the price to the siteground database.
+        }
 
         date = Date.NextWorkingDay(date); //Goes to the following working day. 
     }

@@ -59,6 +59,9 @@ public class UploadToDB
                 case "mfo":
                     existingRow.Mfo05Frb = price;
                     break;
+                case "nyh_diesel":
+                    existingRow.NyhDiesel = price;
+                    break;
             }
             db.SaveChanges();
         }
@@ -107,6 +110,9 @@ public class UploadToDB
                     break;
                 case "mfo":
                     ypw.Mfo05Frb = price;
+                    break;
+                case "nyh_diesel":
+                    ypw.NyhDiesel = price;
                     break;
             }
             ypw.PublishedDate = date;
