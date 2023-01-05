@@ -161,8 +161,31 @@ static void BetweenTwoDates()
 // To be used for daily running of the program. 
 static void CalculatePrices()
 {
+
     DateOnly currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
     DateOnly previousWorkingDay = Date.PreviousWorkingDay(currentDate);
+
+    #region ARGUS CHECKS
+    // ARGUS CHECK
+    // Because Argus emails are always late + causing issues, we have put a check here to make sure that Argus data exists for the day we are trying to generate a price for.
+    // If there is missing Argus data, then the program will stop running completely and be manually uploaded. 
+    
+    if (ArgusCheck.DoesArgusDataForDateExist(previousWorkingDay))
+    {
+        // Send email
+        ArgusCheck.SendArgusCheckEmail(@$"<html> 
+                <body>
+                <p>The Portland Published Wholesale program has stopped because there is missing Argus data for {previousWorkingDay} in the database.</p>
+                <p>Essential data is missing from the <strong>y_argusomr_biofuels_newer</strong> table, such as FAME-10.</p>
+                <p>The program will have to be run manually again once the Argus data is in the database.</p>
+                </body>
+                </html>");
+
+        Environment.Exit(0);
+    }
+
+    #endregion
+
     StringBuilderPlusConsole.WriteLine("The Portland Published Prices for " + previousWorkingDay + " are:");
     StringBuilderPlusConsole.WriteLineSBOnly("<hr>");
 
