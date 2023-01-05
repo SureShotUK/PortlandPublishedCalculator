@@ -167,7 +167,7 @@ static void CalculatePrices()
 
     #region ARGUS CHECKS
     // ARGUS CHECK
-    // Because Argus emails are always late + causing issues, we have put a check here to make sure that Argus data exists for the day we are trying to generate a price for.
+    // Because Argus emails have been causing issues lately, we have put a check here to make sure that Argus data exists for the day we are trying to generate a price for.
     // If there is missing Argus data, then the program will stop running completely and be manually uploaded. 
     
     if (!ArgusCheck.DoesArgusDataForDateExist(previousWorkingDay))
