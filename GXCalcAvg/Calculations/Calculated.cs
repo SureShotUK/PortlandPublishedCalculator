@@ -20,7 +20,7 @@ namespace PortlandPublishedCalculator.Calculations
             Grade.ethanol => Calculations.Portland_Ethanol_EUR_CBM(date),
             Grade.jet => Calculations.Portland_Jet_CIF_NWE(date),
             Grade.propane => Calculations.Portland_Propane_CIF_NWE(date),
-            Grade.hvo_frb => Calculations.TEMPORARY_Portland_HVO_FRB(date), // Set to use TEMPORARY calculation. Revert back when Prima is fixed. 
+            Grade.hvo_frb => Calculations.Portland_HVO_FRB(date),
             Grade.hvo_cif_nwe => Calculations.Portland_HVO_CIF_NWE(date),
             Grade.diesel_frb => Calculations.Portland_Diesel_FRB(date),
             Grade.gasoil => Calculations.Portland_Gasoil1percent_CIF_NWE(date),
