@@ -826,11 +826,11 @@ namespace PortlandPublishedCalculator.Prices
 
                 entity.Property(e => e.Fame0).HasColumnName("fame0");
 
-                entity.Property(e => e.Fame10).HasColumnName("fame-10");
+                entity.Property(e => e.Fame10).HasColumnName("fame_10");
 
-                entity.Property(e => e.Fueloil35Frb).HasColumnName("fueloil_3.5%_frb");
+                entity.Property(e => e.Fueloil35Frb).HasColumnName("fueloil_35_frb");
 
-                entity.Property(e => e.Gasoil01CifNwe).HasColumnName("gasoil_0.1%_cif_nwe");
+                entity.Property(e => e.Gasoil01CifNwe).HasColumnName("gasoil_01_cif_nwe");
 
                 entity.Property(e => e.HvoCifNwe).HasColumnName("hvo_cif_nwe");
 
@@ -838,7 +838,7 @@ namespace PortlandPublishedCalculator.Prices
 
                 entity.Property(e => e.JetCifNwe).HasColumnName("jet_cif_nwe");
 
-                entity.Property(e => e.Mfo05Frb).HasColumnName("mfo_0.5%_frb");
+                entity.Property(e => e.Mfo05Frb).HasColumnName("mfo_05_frb");
 
                 entity.Property(e => e.NyhDiesel).HasColumnName("nyh_diesel");
 
