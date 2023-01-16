@@ -337,51 +337,72 @@ namespace PortlandPublishedCalculator.Calculations
 
             // if any of the retrieved values are null, then return null as all are necessary to creating following steps.
             if (IsValueNullOr0(hvo_production_cost) || IsValueNullOr0(prima_t1_uco_cif_ara) || IsValueNullOr0(diesel_cif_nwe) || IsValueNullOr0(hvo_blend_percentage)
-                || IsValueNullOr0(argusomr_thg_konventionelle) || IsValueNullOr0(gbp_eur) || IsValueNullOr0(gbp_usd) || IsValueNullOr0(argusomr_hvo_class_ii)
-                || IsValueNullOr0(prima_hvo_plant) ) { return null; }
+                || IsValueNullOr0(argusomr_thg_konventionelle) || IsValueNullOr0(gbp_eur) || IsValueNullOr0(gbp_usd) ) { return null; }
 
             double? hvo_uco = hvo_production_cost + prima_t1_uco_cif_ara;
             double? hvo_coc = ( ((hvo_blend_percentage * 3.4141) * (argusomr_thg_konventionelle / gbp_eur) / 10 / hvo_blend_percentage)
                 + (diesel_cif_nwe / gbp_usd / 11.83) ) * gbp_usd * 11.83;
-            double? supplier_quotes = ExcelAverage(argusomr_hvo_class_ii, prima_hvo_plant);
-            double? hvo_frb = Math.Round(ExcelAverage(hvo_uco, hvo_coc, supplier_quotes) * 4, 0, MidpointRounding.AwayFromZero) / 4;
 
-            return hvo_frb;
+            double? supplier_quotes = null;
+            if (!IsValueNullOr0(argusomr_hvo_class_ii) && !IsValueNullOr0(prima_hvo_plant))
+            {
+                supplier_quotes = ExcelAverage(argusomr_hvo_class_ii, prima_hvo_plant);
+            }
+            else if (!IsValueNullOr0(argusomr_hvo_class_ii) && IsValueNullOr0(prima_hvo_plant))
+            {
+                supplier_quotes = argusomr_hvo_class_ii;
+            }
+            else if (IsValueNullOr0(argusomr_hvo_class_ii) && !IsValueNullOr0(prima_hvo_plant))
+            {
+                supplier_quotes = prima_hvo_plant;
+            }
+
+
+            if (!IsValueNullOr0(supplier_quotes))
+            {
+                double? hvo_frb = Math.Round(ExcelAverage(hvo_uco, hvo_coc, supplier_quotes) * 4, 0, MidpointRounding.AwayFromZero) / 4;
+                return hvo_frb;
+            }
+            else
+            {
+                double? hvo_frb = Math.Round(ExcelAverage(hvo_uco, hvo_coc) * 4, 0, MidpointRounding.AwayFromZero) / 4;
+                return hvo_frb;
+            }
         }
-        // Calculates a TEMPORARY Portland HVO_FRB Price that DOESN'T USE PRIMA PRICES, as Prima prices are currently off. 
-        public static double? TEMPORARY_Portland_HVO_FRB(DateOnly date)
-        {   
-            // A TEMPORARY PORTLAND HVO_FRB CALCULATOR THAT DOES NOT USE PRIMA PRICES. 
-            double? hvo_production_cost = Retrieve.HVO_Production_Cost(date);
-            double? diesel_cif_nwe = Retrieve.Diesel_CIF_NWE(date);
-            double? hvo_blend_percentage = Retrieve.HVO_Blend_Percentages(date);
+        // Calculates a TEMPORARY Portland HVO_FRB Price that DOESN'T USE PRIMA PRICES, as Prima prices are currently off.
+        //public static double? TEMPORARY_Portland_HVO_FRB(DateOnly date)
+        //{   
+        //    // A TEMPORARY PORTLAND HVO_FRB CALCULATOR THAT DOES NOT USE PRIMA PRICES. 
+        //    double? hvo_production_cost = Retrieve.HVO_Production_Cost(date);
+        //    double? diesel_cif_nwe = Retrieve.Diesel_CIF_NWE(date);
+        //    double? hvo_blend_percentage = Retrieve.HVO_Blend_Percentages(date);
 
-            double? gbp_eur = Retrieve.FTGbp_To_Eur(date);
-            double? gbp_usd = Retrieve.FTGbp_To_Usd(date);
+        //    double? gbp_eur = Retrieve.FTGbp_To_Eur(date);
+        //    double? gbp_usd = Retrieve.FTGbp_To_Usd(date);
 
-            //// Data retrieved from Prima/ArgusOMR - each retrieval function will find the most recent price - not the one for the given date. This ensures a price is always found.
-            //// In the case of the Argus/Prima program failing (which it routinely does...)
-            //double? prima_t1_uco_cif_ara = Retrieve.Prima_T1_UCO_CIF_ARA(date);
-            //double? prima_hvo_plant = Retrieve.Prima_HVO_Plant(date);
+        //    //// Data retrieved from Prima/ArgusOMR - each retrieval function will find the most recent price - not the one for the given date. This ensures a price is always found.
+        //    //// In the case of the Argus/Prima program failing (which it routinely does...)
+        //    //double? prima_t1_uco_cif_ara = Retrieve.Prima_T1_UCO_CIF_ARA(date);
+        //    //double? prima_hvo_plant = Retrieve.Prima_HVO_Plant(date);
 
-            double? argusomr_thg_konventionelle = Retrieve.ArgusOMR_THG_Konventionelle(date);
-            double? argusomr_hvo_class_ii = Retrieve.ArgusOMR_HVO_Class_II(date);
+        //    double? argusomr_thg_konventionelle = Retrieve.ArgusOMR_THG_Konventionelle(date);
+        //    double? argusomr_hvo_class_ii = Retrieve.ArgusOMR_HVO_Class_II(date);
 
-            // if any of the retrieved values are null, then return null as all are necessary to creating following steps.
-            if (IsValueNullOr0(hvo_production_cost) || IsValueNullOr0(diesel_cif_nwe) || IsValueNullOr0(hvo_blend_percentage)
-                || IsValueNullOr0(argusomr_thg_konventionelle) || IsValueNullOr0(gbp_eur) || IsValueNullOr0(gbp_usd) || IsValueNullOr0(argusomr_hvo_class_ii)
-                ) { return null; }
+        //    // if any of the retrieved values are null, then return null as all are necessary to creating following steps.
+        //    if (IsValueNullOr0(hvo_production_cost) || IsValueNullOr0(diesel_cif_nwe) || IsValueNullOr0(hvo_blend_percentage)
+        //        || IsValueNullOr0(argusomr_thg_konventionelle) || IsValueNullOr0(gbp_eur) || IsValueNullOr0(gbp_usd) || IsValueNullOr0(argusomr_hvo_class_ii)
+        //        ) { return null; }
 
-            //double? hvo_uco = hvo_production_cost + prima_t1_uco_cif_ara;
-            double? hvo_coc = (((hvo_blend_percentage * 3.4141) * (argusomr_thg_konventionelle / gbp_eur) / 10 / hvo_blend_percentage)
-                + (diesel_cif_nwe / gbp_usd / 11.83)) * gbp_usd * 11.83;
+        //    //double? hvo_uco = hvo_production_cost + prima_t1_uco_cif_ara;
+        //    double? hvo_coc = (((hvo_blend_percentage * 3.4141) * (argusomr_thg_konventionelle / gbp_eur) / 10 / hvo_blend_percentage)
+        //        + (diesel_cif_nwe / gbp_usd / 11.83)) * gbp_usd * 11.83;
 
-            // NOT USING PRIMA
-            //double? supplier_quotes = ExcelAverage(argusomr_hvo_class_ii, prima_hvo_plant);
-            double? hvo_frb = Math.Round(ExcelAverage(hvo_coc, argusomr_hvo_class_ii) * 4, 0, MidpointRounding.AwayFromZero) / 4;
+        //    // NOT USING PRIMA
+        //    //double? supplier_quotes = ExcelAverage(argusomr_hvo_class_ii, prima_hvo_plant);
+        //    double? hvo_frb = Math.Round(ExcelAverage(hvo_coc, argusomr_hvo_class_ii) * 4, 0, MidpointRounding.AwayFromZero) / 4;
 
-            return hvo_frb;
-        }
+        //    return hvo_frb;
+        //}
         // Calculates the Portland CIF NWE price for a given date
         public static double? Portland_HVO_CIF_NWE(DateOnly date)
         {
